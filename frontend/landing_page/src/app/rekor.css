@@ -1500,4 +1500,32 @@
   color: #E4572E;
 }
 
+.auth-hackathon-bypass {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed #e4e2d8;
+  text-align: center;
+}
+.auth-hackathon-link {
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  font-family: var(--font-plex, monospace);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #78756d;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 4px;
+}
+.auth-hackathon-link:hover {
+  color: #E4572E;
+  background: #fdf2ed;
+}
+
+
 

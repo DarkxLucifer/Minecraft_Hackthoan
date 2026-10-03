@@ -63,11 +63,6 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
             <a href="#pipeline" className="rekor-nav-link">
               Pipeline
             </a>
-            {isAuthenticated && (
-              <Link href="/dashboard" className="rekor-nav-link" style={{ color: "#E4572E", fontWeight: 700 }}>
-                Control Room
-              </Link>
-            )}
           </div>
 
           {/* Right Action Buttons */}
@@ -78,10 +73,6 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
                   <span className="user-online-dot" />
                   <span className="user-agency-tag">{officer?.badgeId || "OFFICER"}</span>
                 </span>
-                <Link href="/dashboard" className="rekor-launch-btn">
-                  <span>DASHBOARD</span>
-                  <span className="launch-arrow" aria-hidden="true">→</span>
-                </Link>
                 <button
                   type="button"
                   className="rekor-signout-btn"
@@ -137,16 +128,13 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
               <a href="#pipeline" onClick={() => setMobileMenuOpen(false)}>Pipeline</a>
               {isAuthenticated ? (
                 <>
-                  <Link
-                    href="/dashboard"
-                    className="rekor-launch-btn mobile-full"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    ENTER OPERATOR CONTROL ROOM →
-                  </Link>
+                  <div className="rekor-user-pill" style={{ margin: "8px 0" }}>
+                    <span className="user-online-dot" />
+                    <span>{officer?.badgeId || "OFFICER"} · ONLINE</span>
+                  </div>
                   <button
                     type="button"
-                    className="rekor-contact-btn mobile-full"
+                    className="rekor-signout-btn mobile-full"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       signOut();

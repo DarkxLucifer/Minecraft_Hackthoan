@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
 import VisionXLogo from "@/components/VisionXLogo";
 import { useAuth } from "@/context/AuthContext";
 
@@ -16,7 +15,6 @@ export default function AuthModal({
   onClose,
   initialMode = "signin",
 }: AuthModalProps) {
-  const router = useRouter();
   const { signInWithEmail, signUpWithEmail, demoSignIn, isConfigured } = useAuth();
 
   const [mode, setMode] = useState<"signin" | "signup">(initialMode);
@@ -47,6 +45,7 @@ export default function AuthModal({
 
   if (!isOpen) return null;
 
+  // Immediate dummy authentication on submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
@@ -57,20 +56,17 @@ export default function AuthModal({
         if (mode === "signin") {
           const res = await signInWithEmail(email, password);
           if (res.error) {
-            setLoading(false);
-            setErrorMsg(res.error);
-            return;
+            // If error, fall back to dummy authentication smoothly
+            demoSignIn(email || "officer@delhitraffic.gov.in", org);
           }
         } else {
           const res = await signUpWithEmail(email, password, org);
           if (res.error) {
-            setLoading(false);
-            setErrorMsg(res.error);
-            return;
+            demoSignIn(email || "officer@delhitraffic.gov.in", org);
           }
         }
       } else {
-        // Transparent fallback: instantly authenticate session
+        // Dummy authentication for immediate seamless access
         demoSignIn(
           email || "officer.deshmukh@traffic.delhipolice.gov.in",
           org || "Delhi Traffic Police / NHAI Command"
@@ -79,14 +75,20 @@ export default function AuthModal({
 
       setLoading(false);
       onClose();
-      router.push("/dashboard");
     } catch {
-      // Fallback to demo sign in on any unexpected network issue
-      demoSignIn(email, org);
+      demoSignIn(email || "officer@delhitraffic.gov.in", org);
       setLoading(false);
       onClose();
-      router.push("/dashboard");
     }
+  };
+
+  // Hackathon instant 1-click bypass
+  const handleHackathonBypass = () => {
+    demoSignIn(
+      "hackathon.evaluator@visionx.gov.in",
+      "Delhi Traffic Police / NHAI Command"
+    );
+    onClose();
   };
 
   return (
@@ -206,7 +208,7 @@ export default function AuthModal({
           </button>
         </form>
 
-        {/* Clean Mode Switch Link */}
+        {/* Mode Switch Link */}
         <div className="auth-clean-switch">
           {mode === "signin" ? (
             <span>
@@ -237,6 +239,17 @@ export default function AuthModal({
               </button>
             </span>
           )}
+        </div>
+
+        {/* Subtle Hackathon Quick Bypass */}
+        <div className="auth-hackathon-bypass">
+          <button
+            type="button"
+            className="auth-hackathon-link"
+            onClick={handleHackathonBypass}
+          >
+            <span>⚡ Hackathon Review: Click to bypass</span>
+          </button>
         </div>
       </div>
     </div>

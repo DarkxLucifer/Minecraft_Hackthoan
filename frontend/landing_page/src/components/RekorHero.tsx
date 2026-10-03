@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import InteractiveCity from "@/components/InteractiveCity";
 import AuthModal from "@/components/AuthModal";
 import { useAuth } from "@/context/AuthContext";
@@ -56,16 +55,11 @@ export default function RekorHero({ theme = "light" }: RekorHeroProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [videoModalOpen, authOpen]);
 
-  const router = useRouter();
   const { user, officer } = useAuth();
   const isAuthenticated = Boolean(user || officer);
 
   const handleLaunch = () => {
-    if (isAuthenticated) {
-      router.push("/dashboard");
-    } else {
-      setAuthOpen(true);
-    }
+    setAuthOpen(true);
   };
 
   const current = ROTATING_DOMAINS[activeIdx];
