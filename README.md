@@ -74,21 +74,22 @@ Minecraft_Hackthoan/
 │   ├── yolo_processing.py             # TwoStageANPR & TrOCR Processing Engine
 │   ├── test_yolo.py                   # Automated verification test script
 │   └── requirements.txt               # Python dependencies
-├── frontend/                          # Next.js 16 Web Dashboard
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── api/anpr/route.ts      # ANPR API bridge endpoint
-│   │   │   ├── page.tsx               # Main roadway intelligence landing page
-│   │   │   ├── spacex.css             # SpaceX-inspired design system
-│   │   │   └── rekor.css              # Rekor-inspired dashboard styles
-│   │   └── components/
-│   │       ├── Dashboard.tsx          # Real-time heatmap & corridor stats
-│   │       ├── LiveAnprTester.tsx     # Interactive drag-and-drop OCR demo
-│   │       ├── TrajectoryDemo.tsx     # Multi-camera route reconstruction
-│   │       ├── InteractiveCity.tsx    # 3D Canvas camera network view
-│   │       └── RekorHero.tsx          # Minimalist hero header & telemetry
-│   ├── package.json                   # Frontend dependencies
-│   └── tsconfig.json
+├── frontend/
+│   └── landing_page/                  # Next.js 16 Roadway Intelligence Landing Page
+│       ├── src/
+│       │   ├── app/
+│       │   │   ├── api/anpr/route.ts  # ANPR API bridge endpoint
+│       │   │   ├── page.tsx           # Main roadway intelligence landing page
+│       │   │   ├── spacex.css         # SpaceX-inspired design system
+│       │   │   └── rekor.css          # Rekor-inspired dashboard styles
+│       │   └── components/
+│       │       ├── LiveAnprTester.tsx # Interactive drag-and-drop OCR demo
+│       │       ├── TrajectoryDemo.tsx # Multi-camera route reconstruction
+│       │       ├── InteractiveCity.tsx# 3D Canvas camera network view
+│       │       ├── RekorHero.tsx      # Minimalist hero header & telemetry
+│       │       └── AuthModal.tsx      # 21st.dev minimalist login/signup modal
+│       ├── package.json               # Landing page dependencies
+│       └── tsconfig.json
 ├── package.json                       # Monorepo root scripts
 ├── .gitignore                         # Unified Python + Node ignore rules
 └── README.md
@@ -118,7 +119,7 @@ Minecraft_Hackthoan/
 
 ---
 
-### Option A: Run the Frontend Web Dashboard
+### Option A: Run the Landing Page Web Application
 
 ```bash
 # Clone the repository
@@ -130,7 +131,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to explore the dashboard.
+Open [http://localhost:3000](http://localhost:3000) in your browser to explore the landing page.
 
 ---
 
