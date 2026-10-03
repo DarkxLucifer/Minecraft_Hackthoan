@@ -1,0 +1,16 @@
+{
+  "name": "minecraft-hackathon",
+  "version": "1.0.0",
+  "private": true,
+  "description": "VisionX - Roadway Intelligence & Traffic Mobility Platform",
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "npm --workspace=frontend run dev",
+    "build": "npm --workspace=frontend run build",
+    "start": "npm --workspace=frontend run start",
+    "lint": "npm --workspace=frontend run lint",
+    "typecheck": "npm --workspace=frontend run typecheck"
+  }
+}
