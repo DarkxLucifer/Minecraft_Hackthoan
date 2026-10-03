@@ -190,11 +190,13 @@ class TwoStageANPR:
         # Resolve plate model
         if plate_weights is None:
             candidates = [
+                CURRENT_DIR / "models" / "best_yolo.pt",
+                Path(r"C:\Users\yashr\Downloads\best_yolo.pt"),
                 CURRENT_DIR / "models" / "best.pt",
                 CURRENT_DIR / "best.pt",
                 "best.pt"
             ]
-            plate_weights = next((str(p) for p in candidates if Path(p).exists()), "best.pt")
+            plate_weights = next((str(p) for p in candidates if Path(p).exists()), "best_yolo.pt")
 
         print(f"Loading Stage 1 Vehicle Detector from: {vehicle_weights}...")
         self.vehicle_model = YOLO(str(vehicle_weights))
