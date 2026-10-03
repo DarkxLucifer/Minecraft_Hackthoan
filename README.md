@@ -1,54 +1,64 @@
-# 🚗 Minecraft_Hackthoan — End-to-End Three-Stage ANPR & TrOCR Backend
+# 🚗 VisionX — Intelligent ANPR & Traffic Mobility Platform
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.2.6-black.svg?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.0-61DAFB.svg?logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6.svg?logo=typescript)](https://www.typescriptlang.org/)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python)](https://www.python.org/)
 [![YOLO11](https://img.shields.io/badge/Model-YOLO11s%20%7C%20YOLO11n-00FFFF.svg)](https://github.com/ultralytics/ultralytics)
-[![TrOCR](https://img.shields.io/badge/OCR-Vision%20Transformer%20(TrOCR)-FF6F00.svg)](https://huggingface.co/docs/transformers/model_doc/trocr)
-[![PyTorch](https://img.shields.io/badge/Framework-PyTorch-EE4C2C.svg)](https://pytorch.org/)
+[![TrOCR](https://img.shields.io/badge/OCR-Vision%20Transformer%20(TrOCR)-FF6F00.svg?logo=huggingface)](https://huggingface.co/docs/transformers/model_doc/trocr)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-An Automated Number Plate Recognition (**ANPR**) backend designed for multi-vehicle traffic surveillance, smart city toll automation, and high-speed vehicle tracking.
+An enterprise-grade, end-to-end Automated Number Plate Recognition (**ANPR**) and Roadway Intelligence Platform built for **SIH26127 / Minecraft Hackathon**.
 
-Engineered with a **Three-Stage Pipeline** that detects vehicles, localizes plates (including red temporary Trade Certificate plates), and reads alphanumeric characters with high accuracy using a dedicated **Vision Transformer (TrOCR)**.
+VisionX combines a **Three-Stage Deep Learning AI Engine** with an ultra-minimalist, high-performance **SpaceX-inspired Web Dashboard** to deliver real-time vehicle identification, plate text recognition, multi-camera trajectory reconstruction, and grid-based traffic density heatmaps.
 
 ---
 
-## 🏗️ Architecture: Three-Stage Pipeline
+## 🏗️ System Architecture
 
 ```
-                     [High-Res Camera Frame / Video Stream]
-                                       │
-                                       ▼
-                        [Stage 1: Vehicle Detection]
-                          Model: yolo11n.pt (COCO)
-                    (Detects Cars, Buses, Trucks, Motorcycles)
-                                       │
-                ┌──────────────────────┴──────────────────────┐
-                ▼                                             ▼
-          [Vehicle Crop 1]                              [Vehicle Crop 2]
-         (+5% Context Pad)                             (+5% Context Pad)
-                │                                             │
-                ▼                                             ▼
-   [Stage 2: Plate Detection]                    [Stage 2: Plate Detection]
-       Model: best.pt                                Model: best.pt
-    (YOLO11s Fine-Tuned)                          (YOLO11s Fine-Tuned)
-                │                                             │
-                ▼                                             ▼
-        [Plate 1 Crop]                                [Plate 2 Crop]
-                │                                             │
-                ▼                                             ▼
-     [Stage 3: TrOCR Reader]                       [Stage 3: TrOCR Reader]
-    (Vision Transformer OCR)                      (Vision Transformer OCR)
-  DeiT Encoder + TrOCR Decoder                  DeiT Encoder + TrOCR Decoder
-                │                                             │
-                ▼                                             ▼
-     Plate: "HR 01 H 4731"                         Plate: "MH 12 DE 1433"
+                                [Roadway Surveillance Cameras]
+                                               │
+                                               ▼
+               ┌──────────────────────────────────────────────────────────────┐
+               │              AI Vision Engine (Python / PyTorch)             │
+               │                                                              │
+               │   [Stage 1: Vehicle Detection]      Model: yolo11n.pt       │
+               │                  │                                           │
+               │                  ▼                                           │
+               │   [Stage 2: Plate Localization]     Model: best.pt (YOLO11s)│
+               │                  │                                           │
+               │                  ▼                                           │
+               │   [Stage 3: Vision Transformer OCR] Model: TrOCR Indian      │
+               └──────────────────────────────┬───────────────────────────────┘
+                                              │ REST API / WebSocket
+                                              ▼
+               ┌──────────────────────────────────────────────────────────────┐
+               │           VisionX Web Dashboard (Next.js 16 + React)         │
+               │                                                              │
+               │  • Real-Time 16×16 Heatmap Grid & Corridor Speed Gauges     │
+               │  • Interactive Plate Trajectory Reconstruction & Breadcrumbs │
+               │  • Live ANPR Image Upload & Preset Detection Tester         │
+               │  • 3D Interactive City Mesh & Camera Sightings Telemetry     │
+               └──────────────────────────────────────────────────────────────┘
 ```
 
-### Why Three-Stage?
-1. **Parallel Multi-Car Detection**: Solves the single-label bias trap. Every car in the scene receives an isolated, full-resolution pass.
-2. **Sub-Pixel Small Plate Recovery**: Secondary/distant vehicles in the background are scaled dynamically rather than crushed by whole-frame downsampling.
-3. **Color & Low-Contrast Resilience**: Detects standard white/yellow plates, EV green plates, and red temporary Trade Certificate (TC) plates against red bumpers.
-4. **Offline Vision Transformer OCR (TrOCR)**: Uses character-level attention to read distorted, shadowed, or stylized Indian registration numbers with zero reliance on cloud APIs.
+---
+
+## ✨ Key Capabilities
+
+### 1. 🧠 Three-Stage AI Detection Pipeline (`backend/`)
+- **Parallel Multi-Car Processing**: Eliminates single-car bounding box bias; each vehicle receives an isolated high-resolution crop with contextual padding.
+- **Small-Scale Distant Plate Recovery**: Preserves fine character details on high-speed or distant vehicles.
+- **Indian Plate Format Specialization**: Optimized for standard private (white), commercial (yellow), EV (green), and temporary Trade Certificate (red) plates.
+- **Offline Vision Transformer OCR (TrOCR)**: Character-level spatial attention eliminates reliance on cloud APIs and achieves **94.2% character accuracy**.
+
+### 2. ⚡ VisionX Roadway Intelligence Dashboard (`frontend/`)
+- **SpaceX-Grade Minimalist UI**: High-density typography, subtle warm ivory background (`#F5F5F0`), monochrome accents, and zero visual clutter.
+- **16×16 Live Density Heatmap**: Dynamic simulation with compass orientation (N/S/E/W) and density scaling.
+- **Corridor Speed & Hourly Trend Analytics**: Real-time arterial flow tracking with benchmark target lines (50 km/h) and hourly peak detection.
+- **Interactive Trajectory Reconstruction**: Chronological camera sighting trails, timestamps, and route breadcrumbs for any searched registration plate.
+- **Live ANPR Tester**: Drag-and-drop image tester with one-click Indian plate sample presets.
 
 ---
 
@@ -56,25 +66,33 @@ Engineered with a **Three-Stage Pipeline** that detects vehicles, localizes plat
 
 ```
 Minecraft_Hackthoan/
-├── backend/
+├── backend/                           # Python AI / ML ANPR Pipeline
 │   ├── models/
-│   │   ├── best.pt                    # Fine-tuned YOLO11s Indian Plate Detector (18.3 MB)
-│   │   ├── yolo11n.pt                 # Pre-trained COCO Vehicle Detector (5.6 MB)
-│   │   └── trocr_indian_plates/       # Vision Transformer OCR Config & Tokenizers
-│   │       ├── config.json
-│   │       ├── generation_config.json
-│   │       ├── processor_config.json
-│   │       ├── tokenizer.json
-│   │       └── tokenizer_config.json
-│   ├── yolo_processing.py             # TwoStageANPR & TrOCR Engine
-│   ├── test_yolo.py                   # Backend verification test
+│   │   ├── best.pt                    # Fine-tuned YOLO11s Indian Plate Detector
+│   │   ├── yolo11n.pt                 # Pre-trained COCO Vehicle Detector
+│   │   └── trocr_indian_plates/       # TrOCR Vision Transformer Config & Tokenizers
+│   ├── yolo_processing.py             # TwoStageANPR & TrOCR Processing Engine
+│   ├── test_yolo.py                   # Automated verification test script
 │   └── requirements.txt               # Python dependencies
-├── test_yolo.py                       # Root verification test script
-├── .gitignore
+├── frontend/                          # Next.js 16 Web Dashboard
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── api/anpr/route.ts      # ANPR API bridge endpoint
+│   │   │   ├── page.tsx               # Main roadway intelligence landing page
+│   │   │   ├── spacex.css             # SpaceX-inspired design system
+│   │   │   └── rekor.css              # Rekor-inspired dashboard styles
+│   │   └── components/
+│   │       ├── Dashboard.tsx          # Real-time heatmap & corridor stats
+│   │       ├── LiveAnprTester.tsx     # Interactive drag-and-drop OCR demo
+│   │       ├── TrajectoryDemo.tsx     # Multi-camera route reconstruction
+│   │       ├── InteractiveCity.tsx    # 3D Canvas camera network view
+│   │       └── RekorHero.tsx          # Minimalist hero header & telemetry
+│   ├── package.json                   # Frontend dependencies
+│   └── tsconfig.json
+├── package.json                       # Monorepo root scripts
+├── .gitignore                         # Unified Python + Node ignore rules
 └── README.md
 ```
-
-> **Note on Model Weights**: The TrOCR model weights (`model.safetensors`, 235 MB) exceed GitHub's 100 MB file limit. Download or place `model.safetensors` inside `backend/models/trocr_indian_plates/`.
 
 ---
 
@@ -84,29 +102,62 @@ Minecraft_Hackthoan/
 | :--- | :---: | :--- |
 | **Plate Detection mAP@50** | **93.8%** | Outstanding localization on Indian HSRP plates |
 | **Plate Detection mAP@50-95**| **71.5%** | Tight edge-hugging bounding boxes |
-| **Plate Recall** | **98.0%** | Robust detection on cluttered traffic scenes |
+| **Plate Recall** | **98.0%** | Robust detection in high-density traffic scenes |
 | **OCR Character Recognition** | **94.2%** | Handles ambiguous `O/0`, `I/1`, `Z/2` using positional syntax |
-| **Inference Speed (RTX 2050)**| **~18 ms / frame** | **~55 Real-Time FPS** |
+| **Inference Latency (GPU)** | **~18 ms / frame** | Real-time ~55 FPS throughput |
+| **Web Dashboard Build** | **< 15 s** | Next.js Turbopack compilation |
 
 ---
 
 ## 🚀 Quickstart
 
-### 1. Installation
-Clone the repository and install dependencies:
+### Prerequisites
+- **Node.js** >= 18.0
+- **Python** >= 3.10
+- **Git**
+
+---
+
+### Option A: Run the Frontend Web Dashboard
+
 ```bash
+# Clone the repository
 git clone https://github.com/DarkxLucifer/Minecraft_Hackthoan.git
-cd Minecraft_Hackthoan/backend
-pip install -r requirements.txt
+cd Minecraft_Hackthoan
+
+# Install dependencies and start development server
+npm install
+npm run dev
 ```
 
-### 2. Verify End-to-End Pipeline
-Run the verification test:
+Open [http://localhost:3000](http://localhost:3000) in your browser to explore the dashboard.
+
+---
+
+### Option B: Run the Python AI / ANPR Engine
+
 ```bash
+cd backend
+
+# Create and activate virtual environment
+python -m venv venv
+# On Windows:
+venv\Scripts\activate
+# On Linux/macOS:
+source venv/bin/activate
+
+# Install requirements
+pip install -r requirements.txt
+
+# Run the verification test
 python test_yolo.py
 ```
 
-### 3. Python API Usage
+> **Note on Large Model Weights**: The TrOCR model weights (`model.safetensors`, 235 MB) exceed GitHub's single-file limit. Ensure `model.safetensors` is placed in `backend/models/trocr_indian_plates/`.
+
+---
+
+## 🛠️ Python API Integration Example
 
 ```python
 import cv2
@@ -115,29 +166,26 @@ from yolo_processing import TwoStageANPR
 # Initialize 3-Stage Pipeline (Vehicle -> Plate -> TrOCR)
 anpr = TwoStageANPR(enable_ocr=True)
 
-# Run detection on image
+# Run detection on a camera frame
 frame = cv2.imread("traffic_scene.jpg")
 results = anpr.detect(frame, do_ocr=True)
 
-print(f"Vehicles found: {len(results['vehicles'])}")
+print(f"Vehicles identified: {len(results['vehicles'])}")
 for plate in results["plates"]:
     print(f"Detected Plate: {plate['text']} (Confidence: {plate['conf']:.1%})")
 
-# Save rendered output with bounding boxes and recognized text badges
+# Save annotated visualization
 cv2.imwrite("output_annotated.jpg", results["annotated"])
-```
-
-### 4. Video Stream Processing
-
-```python
-# Stream video through ANPR engine
-for frame_idx, annotated_frame, detections in anpr.process_video("traffic.mp4", output_path="annotated.mp4"):
-    for p in detections["plates"]:
-        if p["text"]:
-            print(f"Frame {frame_idx}: Found {p['text']}")
 ```
 
 ---
 
+## 👥 Contributors
+
+- **Frontend & Web Platform**: [awejofficial](https://github.com/awejofficial)
+- **AI / Deep Learning Pipeline**: [DarkxLucifer](https://github.com/DarkxLucifer)
+
+---
+
 ## 📜 License
-MIT License. Created for the Minecraft Hackathon.
+MIT License. Created for the Minecraft Hackathon / SIH26127.

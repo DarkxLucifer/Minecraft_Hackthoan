@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Environments
+# Python Environments
 .venv/
 env/
 venv/
@@ -22,6 +22,22 @@ logs/
 *.log
 test_anpr_trocr_result.jpg
 test_anpr_result.jpg
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+build/
+dist/
+.vercel/
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment variables
+.env
+.env*.local
+.env.production
+.env.development
 
 # IDE configs
 .idea/
