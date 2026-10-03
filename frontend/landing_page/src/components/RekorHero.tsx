@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import InteractiveCity from "@/components/InteractiveCity";
 import AuthModal from "@/components/AuthModal";
+import { useAuth } from "@/context/AuthContext";
 
 const ROTATING_DOMAINS = [
   {
@@ -28,10 +30,21 @@ type RekorHeroProps = {
 };
 
 export default function RekorHero({ theme = "light" }: RekorHeroProps) {
+  const router = useRouter();
   const [activeIdx, setActiveIdx] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+  const { officer } = useAuth();
+  const isLoggedIn = !!officer;
+
+  const handleHeroLaunch = () => {
+    if (isLoggedIn) {
+      router.push("/dashboard");
+      return;
+    }
+    setAuthOpen(true);
+  };
 
   // Auto-rotate every 5.5s unless paused by user interaction
   useEffect(() => {
@@ -124,10 +137,10 @@ export default function RekorHero({ theme = "light" }: RekorHeroProps) {
             <button
               type="button"
               className="rekor-launch-hero-btn"
-              onClick={() => setAuthOpen(true)}
+              onClick={handleHeroLaunch}
               aria-label="Launch VisionX platform"
             >
-              <span>LAUNCH VISIONX</span>
+              <span>{isLoggedIn ? "OPEN DASHBOARD" : "LAUNCH VISIONX"}</span>
               <span className="launch-hero-arrow" aria-hidden="true">→</span>
             </button>
 

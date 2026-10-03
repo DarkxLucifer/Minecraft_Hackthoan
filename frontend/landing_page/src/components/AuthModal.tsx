@@ -1,30 +1,39 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import VisionXLogo from "@/components/VisionXLogo";
+import { useAuth } from "@/context/AuthContext";
 
 type AuthModalProps = {
   isOpen: boolean;
   onClose: () => void;
   initialMode?: "signin" | "signup";
+  reason?: string;
 };
 
 export default function AuthModal({
   isOpen,
   onClose,
   initialMode = "signin",
+  reason,
 }: AuthModalProps) {
+  const router = useRouter();
+  const { signInWithEmail, signUpWithEmail, demoSignIn, isConfigured } = useAuth();
+
   const [mode, setMode] = useState<"signin" | "signup">(initialMode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [org, setOrg] = useState("Delhi Traffic Police / NHAI");
-  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   // Synchronize initial mode when opened
   useEffect(() => {
     setMode(initialMode);
-    setSubmitted(false);
+    setErrorMsg(null);
+    setLoading(false);
   }, [initialMode, isOpen]);
 
   // Handle ESC key
@@ -40,16 +49,55 @@ export default function AuthModal({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const afterAuth = () => {
+    onClose();
+    router.push("/dashboard");
+  };
+
+  // Form submit handler
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      alert(
-        `Welcome to VisionX Roadway Intelligence, ${email || "Officer"}!\n\nAuthenticated under ${org}.\nRedirecting to dispatch telemetric feed...`
-      );
-      setSubmitted(false);
-      onClose();
-    }, 900);
+    setErrorMsg(null);
+    setLoading(true);
+
+    try {
+      if (isConfigured) {
+        if (mode === "signin") {
+          const res = await signInWithEmail(email, password);
+          if (res.error) {
+            // Fallback to demo if Supabase fails
+            demoSignIn(email || "officer@delhitraffic.gov.in", org);
+          }
+        } else {
+          const res = await signUpWithEmail(email, password, org);
+          if (res.error) {
+            demoSignIn(email || "officer@delhitraffic.gov.in", org);
+          }
+        }
+      } else {
+        // Demo authentication for immediate access
+        demoSignIn(
+          email || "officer.deshmukh@traffic.delhipolice.gov.in",
+          org || "Delhi Traffic Police / NHAI Command"
+        );
+      }
+
+      setLoading(false);
+      afterAuth();
+    } catch {
+      demoSignIn(email || "officer@delhitraffic.gov.in", org);
+      setLoading(false);
+      afterAuth();
+    }
+  };
+
+  // Hackathon instant bypass
+  const handleHackathonBypass = () => {
+    demoSignIn(
+      "hackathon.evaluator@visionx.gov.in",
+      "Delhi Traffic Police / NHAI Command"
+    );
+    afterAuth();
   };
 
   return (
@@ -85,7 +133,7 @@ export default function AuthModal({
             role="tab"
             aria-selected={mode === "signin"}
             className={`auth-tab-btn ${mode === "signin" ? "active" : ""}`}
-            onClick={() => setMode("signin")}
+            onClick={() => { setMode("signin"); setErrorMsg(null); }}
           >
             SIGN IN
           </button>
@@ -94,49 +142,43 @@ export default function AuthModal({
             role="tab"
             aria-selected={mode === "signup"}
             className={`auth-tab-btn ${mode === "signup" ? "active" : ""}`}
-            onClick={() => setMode("signup")}
+            onClick={() => { setMode("signup"); setErrorMsg(null); }}
           >
             REQUEST ACCESS
           </button>
         </div>
 
-        {/* Subhead info */}
-        <div className="auth-subhead">
-          <h3>
-            {mode === "signin"
-              ? "Access Roadway Control Room"
-              : "Register Department Credentials"}
-          </h3>
-          <p>
-            {mode === "signin"
-              ? "Enter your municipal or law enforcement credentials to access live camera telemetry."
-              : "Provision new operator seat for automated ANPR surveillance and trajectory dispatch."}
-          </p>
-        </div>
-
-        {/* OAuth 1-Click Buttons */}
-        <div className="auth-oauth-group">
-          <button
-            type="button"
-            className="auth-oauth-btn"
-            onClick={() => {
-              alert("Signing in via Government Single Sign-On (SSO / DigiLocker)...");
-              onClose();
+        {/* Restricted Access Alert Banner */}
+        {reason && (
+          <div
+            style={{
+              padding: "10px 14px",
+              backgroundColor: "#FEF2F2",
+              border: "1px solid #FCA5A5",
+              borderRadius: "8px",
+              color: "#991B1B",
+              fontSize: "12px",
+              marginBottom: "16px",
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
             }}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z" />
-            </svg>
-            <span>Continue with Gov-SSO (Parivahan / NIC)</span>
-          </button>
-        </div>
+            <span>🔒</span>
+            <span>{reason}</span>
+          </div>
+        )}
 
-        {/* Divider */}
-        <div className="auth-divider">
-          <span>OR WORK EMAIL</span>
-        </div>
+        {/* Error notification */}
+        {errorMsg && (
+          <div className="auth-clean-alert" role="alert">
+            <span>{errorMsg}</span>
+          </div>
+        )}
 
-        {/* Form */}
+
+        {/* Clean Form */}
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="auth-field">
             <label htmlFor="auth-email">Official Agency Email</label>
@@ -144,7 +186,7 @@ export default function AuthModal({
               id="auth-email"
               type="email"
               required
-              placeholder="officer@traffic.gov.in"
+              placeholder="officer@agency.gov.in"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
@@ -155,7 +197,14 @@ export default function AuthModal({
             <div className="auth-label-row">
               <label htmlFor="auth-password">Security Passcode</label>
               {mode === "signin" && (
-                <a href="#reset" onClick={(e) => { e.preventDefault(); alert("Recovery link dispatched to registered department terminal."); }} className="auth-forgot">
+                <a
+                  href="#reset"
+                  className="auth-forgot"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    alert("A password recovery link has been dispatched to your registered department terminal.");
+                  }}
+                >
                   Forgot key?
                 </a>
               )}
@@ -164,6 +213,7 @@ export default function AuthModal({
               id="auth-password"
               type="password"
               required
+              minLength={6}
               placeholder="••••••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -190,15 +240,26 @@ export default function AuthModal({
           <button
             type="submit"
             className="auth-submit-btn"
-            disabled={submitted}
+            disabled={loading}
           >
-            {submitted
+            {loading
               ? "AUTHENTICATING TELEMETRY..."
               : mode === "signin"
               ? "LAUNCH OPERATOR PORTAL →"
               : "SUBMIT ACCESS APPLICATION →"}
           </button>
         </form>
+
+        {/* Subtle Hackathon Quick Bypass */}
+        <div className="auth-hackathon-bypass">
+          <button
+            type="button"
+            className="auth-hackathon-link"
+            onClick={handleHackathonBypass}
+          >
+            <span>⚡ Hackathon Review: Click to bypass</span>
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -1402,3 +1402,42 @@
   background: #16a34a;
   display: inline-block;
 }
+
+/* ── Hackathon Bypass Button ───────────────────────────────────────── */
+.auth-hackathon-bypass {
+  margin-top: 10px;
+}
+
+.auth-hackathon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 18px;
+  background: #fffbeb;
+  color: #92400e;
+  border: 1.5px solid #f59e0b;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+}
+
+.auth-hackathon-link:hover {
+  background: #fef3c7;
+  border-color: #d97706;
+  color: #78350f;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+  transform: translateY(-1px);
+}
+
+.auth-hackathon-link:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
