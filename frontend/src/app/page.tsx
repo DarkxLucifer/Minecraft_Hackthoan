@@ -13,97 +13,107 @@ export default function HomePage() {
       <RekorNav theme="light" />
       <RekorHero theme="light" />
 
-      {/* ─────── About Section (Right below Hero) ─────── */}
+      {/* ─────── About VisionX (21st.dev inspired clean bento) ─────── */}
       <section className="section" id="about">
         <div className="wrap">
           <div className="sec-head">
-            <span
-              className="mono-xs"
-              style={{
-                color: "#E4572E",
-                fontWeight: 700,
-                letterSpacing: "1.8px",
-                display: "inline-block",
-                marginBottom: "8px",
-              }}
-            >
-              ABOUT VISIONX · SIH26127
-            </span>
-            <h2>Automated ANPR &amp; Multi-Camera Vehicle Trajectory Engine</h2>
+            <h2>Four Pillars of Roadway Intelligence</h2>
             <p>
-              Engineered for municipal smart cities, highway toll gantries, and law enforcement.
-              VisionX converts raw CCTV streams into real-time operational roadway intelligence —
-              recognizing license plates with offline Vision Transformers and reconstructing complete
-              chronological journeys across camera networks.
+              VisionX unifies vehicle localization, character-level Vision Transformers, and
+              spatial trajectory reconstruction into a single edge-capable mobility operating system.
             </p>
           </div>
 
-          {/* Technical Telemetry Bar */}
-          <div className="about-metrics-bar">
-            <div className="about-metric">
-              <span className="about-metric-val">94.2%</span>
-              <span className="about-metric-lbl">TrOCR Character Accuracy</span>
-            </div>
-            <div className="about-metric">
-              <span className="about-metric-val">&lt; 18ms</span>
-              <span className="about-metric-lbl">Inference Latency (GPU)</span>
-            </div>
-            <div className="about-metric">
-              <span className="about-metric-val">3-Stage</span>
-              <span className="about-metric-lbl">YOLO11 + Plate + TrOCR</span>
-            </div>
-            <div className="about-metric">
-              <span className="about-metric-val">100%</span>
-              <span className="about-metric-lbl">Edge Local &amp; Private</span>
-            </div>
-          </div>
+          <div className="about-bento-grid">
+            {/* Card 1: Dual-Stage Neural OCR */}
+            <article className="bento-card bento-span-2">
+              <div className="bento-card-header">
+                <span className="bento-tag">STAGE 01 &amp; 02</span>
+                <span className="bento-badge">94.2% ACCURACY</span>
+              </div>
+              <h3>Vehicle Localization &amp; Transformer OCR</h3>
+              <p>
+                Two-stage pipeline: YOLO11 detects vehicles in under 18ms, followed by tight plate
+                cropping and character-level TrOCR recognition with Indian HSRP and Trade Certificate syntax validation.
+              </p>
+              <div className="bento-preview-plate">
+                <div className="plate-box">
+                  <span className="plate-flag">IND</span>
+                  <span className="plate-code">DL 04 GH 4004</span>
+                </div>
+                <div className="plate-meta">
+                  <span className="meta-tag green">● Conf: 98.4%</span>
+                  <span className="meta-tag">HSRP Validated</span>
+                  <span className="meta-tag">18ms GPU</span>
+                </div>
+              </div>
+            </article>
 
-          {/* Four Core Architectural Pillars */}
-          <div className="grid4" style={{ marginTop: "40px" }}>
-            <div className="cell">
-              <span className="n">01</span>
-              <h3>High-Precision OCR</h3>
-              <p>Detects the vehicle, isolates the license plate crop, and reads alphanumeric text with character-level attention.</p>
-              <span className="target">Accuracy: Above 90% target</span>
-              <ul style={{ marginTop: "16px" }}>
-                <li>Vehicle-first context isolation</li>
-                <li>Indian plate syntax validation</li>
-                <li>Contrast &amp; blur enhancement</li>
-              </ul>
-            </div>
+            {/* Card 2: Trajectory Reconstruction Engine */}
+            <article className="bento-card">
+              <div className="bento-card-header">
+                <span className="bento-tag">SPATIAL ENGINE</span>
+              </div>
+              <h3>Trajectory Reconstruction</h3>
+              <p>
+                Assembles disparate camera sightings into a chronological route graph, detecting impossible
+                hops (cloned plates) and repetitive circling patterns across municipal junctions.
+              </p>
+              <div className="bento-mini-route">
+                <div className="route-node">
+                  <span className="dot" />
+                  <span>CAM 02</span>
+                  <span className="time">09:07</span>
+                </div>
+                <span className="route-arrow">⟶</span>
+                <div className="route-node hot">
+                  <span className="dot" />
+                  <span>CAM 06</span>
+                  <span className="time">09:09</span>
+                </div>
+              </div>
+            </article>
 
-            <div className="cell">
-              <span className="n">02</span>
-              <h3>Trajectory Engine</h3>
-              <p>Search any plate and reconstruct its sightings in chronological order across the municipal camera network.</p>
-              <ul>
-                <li>Chronological camera hits</li>
-                <li>Impossible-hop detection</li>
-                <li>Fuzzy match misread recovery</li>
-              </ul>
-            </div>
+            {/* Card 3: Macro Corridor Analytics */}
+            <article className="bento-card">
+              <div className="bento-card-header">
+                <span className="bento-tag">FLOW TELEMETRY</span>
+              </div>
+              <h3>Corridor Density &amp; Speed</h3>
+              <p>
+                Aggregates high-frequency plate reads into continuous corridor flow indices,
+                detecting arterial bottlenecks and congestion hotspots before gridlock occurs.
+              </p>
+              <div className="bento-mini-stat">
+                <div className="stat-row">
+                  <span>Ring Road Corridor</span>
+                  <strong>52 km/h</strong>
+                </div>
+                <div className="stat-track">
+                  <div className="stat-fill" style={{ width: "68%" }} />
+                </div>
+              </div>
+            </article>
 
-            <div className="cell">
-              <span className="n">03</span>
-              <h3>Traffic Density</h3>
-              <p>Aggregates raw reads into continuous spatial corridor density and speed telemetry for city operators.</p>
-              <ul>
-                <li>Real-time corridor speed</li>
-                <li>Congestion hotspot identification</li>
-                <li>Arterial flow bottleneck metrics</li>
-              </ul>
-            </div>
-
-            <div className="cell">
-              <span className="n">04</span>
-              <h3>Real-Time Alerts</h3>
-              <p>Instant notification pipeline for stolen vehicles, hotlists, cloned plates, and suspicious circling patterns.</p>
-              <ul>
-                <li>Sub-50ms rule evaluation</li>
-                <li>Multi-camera correlation</li>
-                <li>Law enforcement dispatch push</li>
-              </ul>
-            </div>
+            {/* Card 4: Real-time Control Room Alerts */}
+            <article className="bento-card bento-span-2">
+              <div className="bento-card-header">
+                <span className="bento-tag">ENFORCEMENT DISPATCH</span>
+                <span className="bento-badge alert">SUB-50ms DISPATCH</span>
+              </div>
+              <h3>Instant Watchlist &amp; Anomaly Alerting</h3>
+              <p>
+                Evaluates hotlists and municipal watchlist rules within 50ms of camera ingress,
+                broadcasting instant geolocation and crop telemetry to patrol units and traffic controllers.
+              </p>
+              <div className="bento-alert-row">
+                <span className="alert-dot" />
+                <div className="alert-copy">
+                  <strong>Critical Watchlist Match: MH 12 AB 1234</strong>
+                  <span>Spotted at Flyover Gantry (Sector 09) • Automated dispatch notification issued</span>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </section>

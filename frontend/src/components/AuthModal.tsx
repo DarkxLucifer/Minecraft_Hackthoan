@@ -199,15 +199,6 @@ export default function AuthModal({
               : "SUBMIT ACCESS APPLICATION →"}
           </button>
         </form>
-
-        {/* Compliance Footer */}
-        <div className="auth-modal-footer">
-          <span className="auth-badge">
-            <span className="dot-green" /> 256-BIT ENCRYPTION
-          </span>
-          <span className="auth-sep">•</span>
-          <span>SIH26127 SECURE GATEWAY</span>
-        </div>
       </div>
     </div>
   );
