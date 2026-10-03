@@ -8,6 +8,8 @@
   ],
   "scripts": {
     "dev": "npm --workspace=frontend run dev",
+    "dev:backend": "python -m uvicorn backend.server:app --host 0.0.0.0 --port 8000 --reload",
+    "test:backend": "python backend/test_yolo.py",
     "build": "npm --workspace=frontend run build",
     "start": "npm --workspace=frontend run start",
     "lint": "npm --workspace=frontend run lint",
