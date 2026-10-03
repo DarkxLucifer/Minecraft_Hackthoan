@@ -4,15 +4,15 @@
   "private": true,
   "description": "VisionX - Roadway Intelligence & Traffic Mobility Platform",
   "workspaces": [
-    "frontend"
+    "frontend/landing_page"
   ],
   "scripts": {
-    "dev": "npm --workspace=frontend run dev",
+    "dev": "npm --workspace=frontend/landing_page run dev",
     "dev:backend": "python -m uvicorn backend.server:app --host 0.0.0.0 --port 8000 --reload",
     "test:backend": "python backend/test_yolo.py",
-    "build": "npm --workspace=frontend run build",
-    "start": "npm --workspace=frontend run start",
-    "lint": "npm --workspace=frontend run lint",
-    "typecheck": "npm --workspace=frontend run typecheck"
+    "build": "npm --workspace=frontend/landing_page run build",
+    "start": "npm --workspace=frontend/landing_page run start",
+    "lint": "npm --workspace=frontend/landing_page run lint",
+    "typecheck": "npm --workspace=frontend/landing_page run typecheck"
   }
 }
