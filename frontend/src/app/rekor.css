@@ -48,18 +48,23 @@
 
 /* ─── VisionX SpaceX Text-Based Brand Logo ─── */
 .visionx-spacex-logo,
-.visionx-brand-logo {
+.visionx-brand-logo,
+.visionx-brand-wrap {
   display: inline-flex;
-  align-items: baseline;
-  font-family: inherit;
-  font-weight: 900;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: 2.4px;
-  text-transform: uppercase;
-  color: #000000;
+  align-items: center;
   user-select: none;
   text-decoration: none;
+}
+.visionx-brand-wrap img {
+  display: block;
+  height: 22px;
+  width: auto;
+  max-width: 170px;
+  object-fit: contain;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.rekor-brand-link:hover .visionx-brand-wrap img {
+  opacity: 0.85;
 }
 .visionx-spacex-logo span,
 .visionx-brand-x {

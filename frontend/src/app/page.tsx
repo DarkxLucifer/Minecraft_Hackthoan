@@ -3,6 +3,7 @@ import LaneStrip from "@/components/LaneStrip";
 import RekorNav from "@/components/RekorNav";
 import RekorHero from "@/components/RekorHero";
 import LiveAnprTester from "@/components/LiveAnprTester";
+import VisionXLogo from "@/components/VisionXLogo";
 
 export const dynamic = "force-dynamic";
 
@@ -214,8 +215,11 @@ export default function HomePage() {
 
       {/* ─────── Footer ─────── */}
       <footer>
-        <div className="wrap">
-          <span>VISIONX · ADVANCED MOBILITY &amp; ROADWAY INTELLIGENCE</span>
+        <div className="wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+            <VisionXLogo size="sm" />
+            <span>ADVANCED MOBILITY &amp; ROADWAY INTELLIGENCE</span>
+          </div>
           <span>SIH26127 • THREE-STAGE YOLO11 + TROCR LOCAL INFERENCE</span>
         </div>
       </footer>
