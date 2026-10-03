@@ -1402,3 +1402,169 @@
   background: #16a34a;
   display: inline-block;
 }
+
+/* ─── Navbar Auth Bar & User Pill ─── */
+.rekor-auth-user-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.rekor-user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: #f4f3ed;
+  border: 1px solid #e2dfd4;
+  border-radius: 4px;
+  font-family: var(--font-plex, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  color: #121212;
+}
+.user-online-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 6px #10B981;
+}
+.user-agency-tag {
+  letter-spacing: 0.5px;
+}
+.rekor-signout-btn {
+  background: transparent;
+  border: 1px solid #d4d0c5;
+  color: #55554f;
+  font-family: var(--font-plex, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 7px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.rekor-signout-btn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+/* ─── AuthModal Supabase Status & Alerts ─── */
+.auth-status-bar {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+}
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-plex, monospace);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 9999px;
+}
+.status-pill.configured {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+.status-pill.demo {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+.status-pill .status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.auth-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  margin-bottom: 14px;
+}
+.auth-alert.error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+.auth-alert.info {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+.auth-alert-icon {
+  font-weight: 700;
+}
+.auth-alert-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.auth-inline-demo-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  color: #dc2626;
+  text-decoration: underline;
+  cursor: pointer;
+  text-align: left;
+}
+.auth-demo-footer {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.auth-demo-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #18202F;
+  color: #ffffff;
+  border: 1px solid #2B3547;
+  border-radius: 6px;
+  font-family: var(--font-plex, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.auth-demo-btn:hover {
+  background: #232D42;
+  border-color: #E4572E;
+  color: #fff;
+}
+.demo-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #E4572E;
+  box-shadow: 0 0 6px #E4572E;
+}
+.auth-demo-note {
+  font-size: 10px;
+  color: #88867E;
+  text-align: center;
+}
+

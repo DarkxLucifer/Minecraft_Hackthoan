@@ -1,14 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import VisionXLogo from "@/components/VisionXLogo";
 import AuthModal from "@/components/AuthModal";
+import { useAuth } from "@/context/AuthContext";
 
 type RekorNavProps = {
   theme?: "light" | "dark";
 };
 
 export default function RekorNav({ theme = "light" }: RekorNavProps) {
+  const { user, officer, signOut } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
@@ -35,6 +38,8 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  const isAuthenticated = Boolean(user || officer);
+
   return (
     <>
       <nav
@@ -43,11 +48,11 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
       >
         <div className="rekor-nav-container">
           {/* Logo */}
-          <a href="#top" className="rekor-brand-link" aria-label="VisionX Home">
+          <Link href="/" className="rekor-brand-link" aria-label="VisionX Home">
             <VisionXLogo size="md" />
-          </a>
+          </Link>
 
-          {/* Center Navigation Links - Curated to requested layout */}
+          {/* Center Navigation Links */}
           <div className="rekor-nav-menu desktop-only">
             <a href="#about" className="rekor-nav-link">
               About
@@ -58,28 +63,56 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
             <a href="#pipeline" className="rekor-nav-link">
               Pipeline
             </a>
+            {isAuthenticated && (
+              <Link href="/dashboard" className="rekor-nav-link" style={{ color: "#E4572E", fontWeight: 700 }}>
+                Control Room
+              </Link>
+            )}
           </div>
 
           {/* Right Action Buttons */}
           <div className="rekor-nav-actions">
-            <button
-              type="button"
-              className="rekor-contact-btn"
-              onClick={() => setContactOpen(true)}
-            >
-              Contact
-            </button>
+            {isAuthenticated ? (
+              <div className="rekor-auth-user-bar">
+                <span className="rekor-user-pill" title={officer?.email || user?.email || ""}>
+                  <span className="user-online-dot" />
+                  <span className="user-agency-tag">{officer?.badgeId || "OFFICER"}</span>
+                </span>
+                <Link href="/dashboard" className="rekor-launch-btn">
+                  <span>DASHBOARD</span>
+                  <span className="launch-arrow" aria-hidden="true">→</span>
+                </Link>
+                <button
+                  type="button"
+                  className="rekor-signout-btn"
+                  onClick={() => signOut()}
+                  title="Sign out of operator session"
+                >
+                  SIGN OUT
+                </button>
+              </div>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="rekor-contact-btn"
+                  onClick={() => setContactOpen(true)}
+                >
+                  Contact
+                </button>
 
-            {/* Launch VisionX Button */}
-            <button
-              type="button"
-              className="rekor-launch-btn"
-              onClick={() => setAuthOpen(true)}
-              aria-label="Launch VisionX Platform"
-            >
-              <span>LAUNCH VISIONX</span>
-              <span className="launch-arrow" aria-hidden="true">→</span>
-            </button>
+                {/* Launch VisionX Button */}
+                <button
+                  type="button"
+                  className="rekor-launch-btn"
+                  onClick={() => setAuthOpen(true)}
+                  aria-label="Launch VisionX Platform"
+                >
+                  <span>LAUNCH VISIONX</span>
+                  <span className="launch-arrow" aria-hidden="true">→</span>
+                </button>
+              </>
+            )}
 
             {/* Mobile Hamburger Button */}
             <button
@@ -102,26 +135,50 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
               <a href="#about" onClick={() => setMobileMenuOpen(false)}>About</a>
               <a href="#demo" onClick={() => setMobileMenuOpen(false)}>Solutions</a>
               <a href="#pipeline" onClick={() => setMobileMenuOpen(false)}>Pipeline</a>
-              <button
-                type="button"
-                className="rekor-launch-btn mobile-full"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setAuthOpen(true);
-                }}
-              >
-                LAUNCH VISIONX →
-              </button>
-              <button
-                type="button"
-                className="rekor-contact-btn mobile-full"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setContactOpen(true);
-                }}
-              >
-                Contact Us
-              </button>
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className="rekor-launch-btn mobile-full"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    ENTER OPERATOR CONTROL ROOM →
+                  </Link>
+                  <button
+                    type="button"
+                    className="rekor-contact-btn mobile-full"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      signOut();
+                    }}
+                  >
+                    Sign Out ({officer?.badgeId || "Officer"})
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    className="rekor-launch-btn mobile-full"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setAuthOpen(true);
+                    }}
+                  >
+                    LAUNCH VISIONX →
+                  </button>
+                  <button
+                    type="button"
+                    className="rekor-contact-btn mobile-full"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setContactOpen(true);
+                    }}
+                  >
+                    Contact Us
+                  </button>
+                </>
+              )}
             </div>
           </div>
         )}

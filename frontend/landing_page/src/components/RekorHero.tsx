@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import InteractiveCity from "@/components/InteractiveCity";
 import AuthModal from "@/components/AuthModal";
+import { useAuth } from "@/context/AuthContext";
 
 const ROTATING_DOMAINS = [
   {
@@ -53,6 +55,18 @@ export default function RekorHero({ theme = "light" }: RekorHeroProps) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [videoModalOpen, authOpen]);
+
+  const router = useRouter();
+  const { user, officer } = useAuth();
+  const isAuthenticated = Boolean(user || officer);
+
+  const handleLaunch = () => {
+    if (isAuthenticated) {
+      router.push("/dashboard");
+    } else {
+      setAuthOpen(true);
+    }
+  };
 
   const current = ROTATING_DOMAINS[activeIdx];
 
@@ -124,10 +138,10 @@ export default function RekorHero({ theme = "light" }: RekorHeroProps) {
             <button
               type="button"
               className="rekor-launch-hero-btn"
-              onClick={() => setAuthOpen(true)}
-              aria-label="Launch VisionX platform"
+              onClick={handleLaunch}
+              aria-label={isAuthenticated ? "Enter Operator Control Room" : "Launch VisionX platform"}
             >
-              <span>LAUNCH VISIONX</span>
+              <span>{isAuthenticated ? "OPEN CONTROL ROOM" : "LAUNCH VISIONX"}</span>
               <span className="launch-hero-arrow" aria-hidden="true">→</span>
             </button>
 

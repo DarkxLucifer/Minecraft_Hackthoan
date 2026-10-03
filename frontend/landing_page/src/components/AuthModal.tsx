@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import VisionXLogo from "@/components/VisionXLogo";
+import { useAuth } from "@/context/AuthContext";
 
 type AuthModalProps = {
   isOpen: boolean;
@@ -14,17 +16,24 @@ export default function AuthModal({
   onClose,
   initialMode = "signin",
 }: AuthModalProps) {
+  const router = useRouter();
+  const { signInWithEmail, signUpWithEmail, demoSignIn, isConfigured } = useAuth();
+
   const [mode, setMode] = useState<"signin" | "signup">(initialMode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [org, setOrg] = useState("Delhi Traffic Police / NHAI");
-  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [infoMsg, setInfoMsg] = useState<string | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   // Synchronize initial mode when opened
   useEffect(() => {
     setMode(initialMode);
-    setSubmitted(false);
+    setErrorMsg(null);
+    setInfoMsg(null);
+    setLoading(false);
   }, [initialMode, isOpen]);
 
   // Handle ESC key
@@ -40,16 +49,48 @@ export default function AuthModal({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      alert(
-        `Welcome to VisionX Roadway Intelligence, ${email || "Officer"}!\n\nAuthenticated under ${org}.\nRedirecting to dispatch telemetric feed...`
-      );
-      setSubmitted(false);
+    setErrorMsg(null);
+    setInfoMsg(null);
+    setLoading(true);
+
+    if (mode === "signin") {
+      const res = await signInWithEmail(email, password);
+      if (res.error) {
+        setLoading(false);
+        setErrorMsg(res.error);
+        return;
+      }
+      setLoading(false);
       onClose();
-    }, 900);
+      router.push("/dashboard");
+    } else {
+      const res = await signUpWithEmail(email, password, org);
+      if (res.error) {
+        setLoading(false);
+        setErrorMsg(res.error);
+        return;
+      }
+      setLoading(false);
+      if (res.confirmationRequired) {
+        setInfoMsg(
+          "Confirmation email dispatched. Please verify your email before signing in, or use Instant Demo Access."
+        );
+      } else {
+        onClose();
+        router.push("/dashboard");
+      }
+    }
+  };
+
+  const handleDemoAccess = () => {
+    demoSignIn(
+      email || "officer.deshmukh@traffic.delhipolice.gov.in",
+      org || "Delhi Traffic Police / NHAI Command"
+    );
+    onClose();
+    router.push("/dashboard");
   };
 
   return (
@@ -78,6 +119,14 @@ export default function AuthModal({
           </button>
         </div>
 
+        {/* Supabase Status Pill */}
+        <div className="auth-status-bar">
+          <span className={`status-pill ${isConfigured ? "configured" : "demo"}`}>
+            <span className="status-dot" />
+            {isConfigured ? "Supabase Cloud Auth Active" : "Supabase Keys Pending · Demo Mode Ready"}
+          </span>
+        </div>
+
         {/* Mode Toggle Switch */}
         <div className="auth-tab-switch" role="tablist">
           <button
@@ -85,18 +134,24 @@ export default function AuthModal({
             role="tab"
             aria-selected={mode === "signin"}
             className={`auth-tab-btn ${mode === "signin" ? "active" : ""}`}
-            onClick={() => setMode("signin")}
+            onClick={() => {
+              setMode("signin");
+              setErrorMsg(null);
+            }}
           >
-            SIGN IN
+            OFFICER SIGN IN
           </button>
           <button
             type="button"
             role="tab"
             aria-selected={mode === "signup"}
             className={`auth-tab-btn ${mode === "signup" ? "active" : ""}`}
-            onClick={() => setMode("signup")}
+            onClick={() => {
+              setMode("signup");
+              setErrorMsg(null);
+            }}
           >
-            REQUEST ACCESS
+            REGISTER SEAT
           </button>
         </div>
 
@@ -109,32 +164,36 @@ export default function AuthModal({
           </h3>
           <p>
             {mode === "signin"
-              ? "Enter your municipal or law enforcement credentials to access live camera telemetry."
-              : "Provision new operator seat for automated ANPR surveillance and trajectory dispatch."}
+              ? "Enter your verified agency email & password to access real-time ANPR and telemetry."
+              : "Provision new operator account with authenticated Supabase credentials."}
           </p>
         </div>
 
-        {/* OAuth 1-Click Buttons */}
-        <div className="auth-oauth-group">
-          <button
-            type="button"
-            className="auth-oauth-btn"
-            onClick={() => {
-              alert("Signing in via Government Single Sign-On (SSO / DigiLocker)...");
-              onClose();
-            }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z" />
-            </svg>
-            <span>Continue with Gov-SSO (Parivahan / NIC)</span>
-          </button>
-        </div>
+        {/* Error / Info Alerts */}
+        {errorMsg && (
+          <div className="auth-alert error" role="alert">
+            <span className="auth-alert-icon">⚠</span>
+            <div className="auth-alert-body">
+              <span>{errorMsg}</span>
+              {!isConfigured && (
+                <button
+                  type="button"
+                  className="auth-inline-demo-btn"
+                  onClick={handleDemoAccess}
+                >
+                  Click here to bypass with Demo Operator Access →
+                </button>
+              )}
+            </div>
+          </div>
+        )}
 
-        {/* Divider */}
-        <div className="auth-divider">
-          <span>OR WORK EMAIL</span>
-        </div>
+        {infoMsg && (
+          <div className="auth-alert info" role="status">
+            <span className="auth-alert-icon">ℹ</span>
+            <span>{infoMsg}</span>
+          </div>
+        )}
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="auth-form">
@@ -144,7 +203,7 @@ export default function AuthModal({
               id="auth-email"
               type="email"
               required
-              placeholder="officer@traffic.gov.in"
+              placeholder="officer@traffic.delhipolice.gov.in"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
@@ -153,17 +212,16 @@ export default function AuthModal({
 
           <div className="auth-field">
             <div className="auth-label-row">
-              <label htmlFor="auth-password">Security Passcode</label>
+              <label htmlFor="auth-password">Security Password</label>
               {mode === "signin" && (
-                <a href="#reset" onClick={(e) => { e.preventDefault(); alert("Recovery link dispatched to registered department terminal."); }} className="auth-forgot">
-                  Forgot key?
-                </a>
+                <span className="auth-hint">Min 6 characters</span>
               )}
             </div>
             <input
               id="auth-password"
               type="password"
               required
+              minLength={6}
               placeholder="••••••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -190,15 +248,33 @@ export default function AuthModal({
           <button
             type="submit"
             className="auth-submit-btn"
-            disabled={submitted}
+            disabled={loading}
           >
-            {submitted
+            {loading
               ? "AUTHENTICATING TELEMETRY..."
               : mode === "signin"
               ? "LAUNCH OPERATOR PORTAL →"
-              : "SUBMIT ACCESS APPLICATION →"}
+              : "CREATE CREDENTIALS & ACCESS →"}
           </button>
         </form>
+
+        {/* 1-Click Demo Shortcut */}
+        <div className="auth-demo-footer">
+          <div className="auth-divider">
+            <span>OR INSTANT REVIEW ACCESS</span>
+          </div>
+          <button
+            type="button"
+            className="auth-demo-btn"
+            onClick={handleDemoAccess}
+          >
+            <span className="demo-dot" />
+            <span>ENTER AS DEMO LEAD DISPATCHER →</span>
+          </button>
+          <span className="auth-demo-note">
+            Bypasses database lookup for hackathon evaluations & instant review.
+          </span>
+        </div>
       </div>
     </div>
   );

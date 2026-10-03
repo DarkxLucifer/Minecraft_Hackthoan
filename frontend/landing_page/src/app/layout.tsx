@@ -25,10 +25,14 @@ export const metadata: Metadata = {
     "Using Artificial Intelligence, VisionX collects, connects, and organizes the world's mobility data to deliver revolutionary roadway intelligence and operating systems for the road.",
 };
 
+import { AuthProvider } from "@/context/AuthContext";
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${mono.variable}`}>
-      <body>{children}</body>
+      <body>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }

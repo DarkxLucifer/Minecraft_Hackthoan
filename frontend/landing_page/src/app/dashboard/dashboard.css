@@ -1,0 +1,807 @@
+/* ==============================================================================
+   VisionX Operator Control Room — Neo-Brutalist & SpaceX Bento Console Styles
+   ============================================================================== */
+
+:root {
+  --op-bg: #0B0D11;
+  --op-card-bg: #12161F;
+  --op-card-border: #1E2533;
+  --op-border-focus: #374151;
+  --op-text-primary: #F3F4F6;
+  --op-text-secondary: #9CA3AF;
+  --op-text-muted: #6B7280;
+  --op-accent: #E4572E;
+  --op-accent-glow: rgba(228, 87, 46, 0.25);
+  --op-green: #10B981;
+  --op-yellow: #F59E0B;
+  --op-blue: #3B82F6;
+  --op-font-mono: var(--font-plex), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.operator-root {
+  min-height: 100vh;
+  background-color: var(--op-bg);
+  color: var(--op-text-primary);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Top Command Bar ─── */
+.operator-header {
+  height: 64px;
+  background: rgba(18, 22, 31, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--op-card-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 24px;
+}
+
+.operator-header-inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.operator-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.operator-portal-back {
+  font-family: var(--op-font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--op-text-secondary);
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--op-card-border);
+  transition: all 0.2s ease;
+}
+
+.operator-portal-back:hover {
+  color: #fff;
+  border-color: #4B5563;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.operator-sector-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(228, 87, 46, 0.1);
+  border: 1px solid rgba(228, 87, 46, 0.3);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: var(--op-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  color: var(--op-accent);
+}
+
+.operator-center-telemetry {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.operator-clock-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: var(--op-font-mono);
+}
+
+.operator-clock-time {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+.operator-clock-zone {
+  font-size: 10px;
+  color: var(--op-text-muted);
+  letter-spacing: 0.5px;
+}
+
+.operator-engine-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--op-font-mono);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: #18202F;
+  border: 1px solid var(--op-card-border);
+}
+
+.engine-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--op-green);
+  box-shadow: 0 0 8px var(--op-green);
+  animation: pulse-dot 2s infinite ease-in-out;
+}
+
+.engine-dot.standby {
+  background: var(--op-yellow);
+  box-shadow: 0 0 6px var(--op-yellow);
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.operator-user-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.operator-badge-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 12px;
+  background: #151A24;
+  border: 1px solid var(--op-card-border);
+  border-radius: 6px;
+}
+
+.officer-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  background: var(--op-accent);
+  color: #fff;
+  font-family: var(--op-font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.officer-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.officer-badge-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+}
+
+.officer-agency-name {
+  font-size: 9px;
+  color: var(--op-text-secondary);
+  font-family: var(--op-font-mono);
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.operator-signout-btn {
+  font-family: var(--op-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: transparent;
+  color: var(--op-text-secondary);
+  border: 1px solid var(--op-card-border);
+  padding: 7px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.operator-signout-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #F87171;
+}
+
+/* ─── Main Content Canvas ─── */
+.operator-main {
+  flex: 1;
+  padding: 24px;
+  max-width: 1800px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ─── Bento Grid Structure ─── */
+.bento-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+}
+
+/* Stat Cards Row */
+.bento-stats-row {
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.bento-stat-card {
+  background: var(--op-card-bg);
+  border: 1px solid var(--op-card-border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.bento-stat-card:hover {
+  border-color: #374151;
+  transform: translateY(-2px);
+}
+
+.bento-stat-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(228, 87, 46, 0.8), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.bento-stat-card:hover::before {
+  opacity: 1;
+}
+
+.bento-stat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.bento-stat-label {
+  font-family: var(--op-font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--op-text-secondary);
+}
+
+.bento-stat-icon {
+  font-size: 14px;
+  color: var(--op-text-muted);
+}
+
+.bento-stat-value {
+  font-family: var(--op-font-mono);
+  font-size: 30px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.bento-stat-foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--op-text-muted);
+  font-family: var(--op-font-mono);
+}
+
+.stat-trend-up {
+  color: var(--op-green);
+  font-weight: 600;
+}
+
+.stat-trend-alert {
+  color: var(--op-accent);
+  font-weight: 600;
+}
+
+/* Card Shell */
+.bento-card {
+  background: var(--op-card-bg);
+  border: 1px solid var(--op-card-border);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.bento-card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #1E2533;
+  padding-bottom: 12px;
+}
+
+.bento-card-kicker {
+  display: block;
+  font-family: var(--op-font-mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: var(--op-accent);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.bento-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+.bento-badge {
+  font-family: var(--op-font-mono);
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid #2B3344;
+  color: var(--op-text-secondary);
+}
+
+/* Heatmap Card (Span 7) */
+.bento-heatmap-card {
+  grid-column: span 7;
+}
+
+.heatmap-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-family: var(--op-font-mono);
+  font-size: 11px;
+}
+
+.heatmap-sector-select {
+  background: #18202F;
+  border: 1px solid var(--op-card-border);
+  color: #fff;
+  font-size: 11px;
+  font-family: var(--op-font-mono);
+  padding: 4px 8px;
+  border-radius: 4px;
+  outline: none;
+}
+
+.heatmap-container-tactical {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 12px 0;
+}
+
+.tactical-grid-compass {
+  position: absolute;
+  font-family: var(--op-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--op-text-muted);
+}
+
+.tactical-grid-compass.n { top: 0; left: 50%; transform: translateX(-50%); }
+.tactical-grid-compass.s { bottom: 0; left: 50%; transform: translateX(-50%); }
+.tactical-grid-compass.w { left: 4px; top: 50%; transform: translateY(-50%); }
+.tactical-grid-compass.e { right: 4px; top: 50%; transform: translateY(-50%); }
+
+.tactical-heatmap-cells {
+  display: grid;
+  grid-template-columns: repeat(16, 18px);
+  gap: 3px;
+  padding: 16px;
+  background: #090B0E;
+  border: 1px solid #1E2533;
+  border-radius: 6px;
+}
+
+.tactical-cell {
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  transition: background 0.5s ease;
+  cursor: crosshair;
+}
+
+.tactical-cell:hover {
+  outline: 2px solid #fff;
+  z-index: 5;
+}
+
+.heatmap-scale-legend {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-family: var(--op-font-mono);
+  font-size: 10px;
+  color: var(--op-text-muted);
+}
+
+.scale-gradient-bar {
+  flex: 1;
+  height: 6px;
+  margin: 0 12px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #1C2331, #2563EB, #F59E0B, #E4572E);
+}
+
+/* Corridors & Diurnal Curve Card (Span 5) */
+.bento-metrics-card {
+  grid-column: span 5;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.corridor-bar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.corridor-bar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.corridor-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-family: var(--op-font-mono);
+}
+
+.corridor-bar-name {
+  color: var(--op-text-primary);
+}
+
+.corridor-bar-speed {
+  font-weight: 700;
+  color: #fff;
+}
+
+.corridor-track {
+  height: 8px;
+  background: #18202F;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.corridor-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.diurnal-trend-wrap {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #1E2533;
+}
+
+.diurnal-hours-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--op-font-mono);
+  font-size: 9px;
+  color: var(--op-text-muted);
+  margin-top: 6px;
+}
+
+/* Tactical Camera Card (Span 6) */
+.bento-camera-card {
+  grid-column: span 6;
+}
+
+.camera-nav-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+}
+
+.camera-tab-btn {
+  font-family: var(--op-font-mono);
+  font-size: 11px;
+  padding: 6px 12px;
+  background: #151A24;
+  border: 1px solid var(--op-card-border);
+  color: var(--op-text-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.camera-tab-btn.active {
+  background: #252D3D;
+  border-color: var(--op-accent);
+  color: #fff;
+  font-weight: 700;
+}
+
+.camera-viewport {
+  height: 240px;
+  background: #090B0E;
+  border: 1px solid #1E2533;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.camera-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.camera-hud-overlay {
+  position: absolute;
+  inset: 0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+  font-family: var(--op-font-mono);
+  font-size: 11px;
+  background: radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+.camera-hud-top {
+  display: flex;
+  justify-content: space-between;
+  color: var(--op-green);
+  text-shadow: 0 0 4px rgba(16, 185, 129, 0.4);
+}
+
+.camera-hud-bottom {
+  display: flex;
+  justify-content: space-between;
+  color: var(--op-text-muted);
+  font-size: 10px;
+}
+
+/* Tactical Detection Boxes */
+.detection-box {
+  position: absolute;
+  border: 1.5px solid var(--op-green);
+  background: rgba(16, 185, 129, 0.08);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.detection-tag {
+  position: absolute;
+  top: -16px;
+  left: 0;
+  background: var(--op-green);
+  color: #000;
+  font-size: 9px;
+  font-family: var(--op-font-mono);
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+/* Sighting Feed Card (Span 6) */
+.bento-sightings-card {
+  grid-column: span 6;
+}
+
+.sightings-table-wrap {
+  overflow-y: auto;
+  max-height: 290px;
+}
+
+.sightings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--op-font-mono);
+  font-size: 11px;
+}
+
+.sightings-table th {
+  text-align: left;
+  padding: 8px 10px;
+  color: var(--op-text-muted);
+  border-bottom: 1px solid #1E2533;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.8px;
+}
+
+.sightings-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #151A24;
+  color: var(--op-text-secondary);
+}
+
+.sightings-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.plate-badge-tactical {
+  display: inline-block;
+  padding: 3px 8px;
+  background: #FFF;
+  color: #000;
+  font-weight: 800;
+  letter-spacing: 1px;
+  border: 1px solid #000;
+  border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.plate-badge-tactical.hotlist {
+  background: #FEE2E2;
+  color: #DC2626;
+  border-color: #DC2626;
+  animation: pulse-hotlist 1.5s infinite;
+}
+
+@keyframes pulse-hotlist {
+  0%, 100% { box-shadow: 0 0 0 rgba(220, 38, 38, 0); }
+  50% { box-shadow: 0 0 10px rgba(220, 38, 38, 0.5); }
+}
+
+.conf-pill {
+  color: var(--op-green);
+  font-weight: 600;
+}
+
+/* Gate Screen / Loading Screen */
+.operator-gate-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #090B0E;
+  padding: 24px;
+}
+
+.operator-gate-card {
+  max-width: 480px;
+  width: 100%;
+  background: #12161F;
+  border: 1px solid #1E2533;
+  border-radius: 12px;
+  padding: 36px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.gate-icon {
+  font-size: 36px;
+  margin-bottom: 16px;
+  display: inline-block;
+  color: var(--op-accent);
+}
+
+.operator-gate-card h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+
+.operator-gate-card p {
+  font-size: 13px;
+  color: var(--op-text-secondary);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.gate-cta-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--op-accent);
+  color: #fff;
+  font-family: var(--op-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  margin-bottom: 12px;
+}
+
+.gate-cta-btn:hover {
+  opacity: 0.9;
+}
+
+.gate-demo-btn {
+  width: 100%;
+  padding: 11px;
+  background: #1E2533;
+  color: #fff;
+  font-family: var(--op-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gate-demo-btn:hover {
+  background: #283344;
+}
+
+.gate-back-link {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--op-text-muted);
+  text-decoration: none;
+}
+
+.gate-back-link:hover {
+  color: #fff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .bento-heatmap-card { grid-column: span 12; }
+  .bento-metrics-card { grid-column: span 12; }
+  .bento-camera-card { grid-column: span 12; }
+  .bento-sightings-card { grid-column: span 12; }
+}
+
+@media (max-width: 768px) {
+  .bento-stats-row { grid-template-columns: repeat(2, 1fr); }
+  .operator-center-telemetry { display: none; }
+  .tactical-heatmap-cells { grid-template-columns: repeat(16, 14px); gap: 2px; }
+  .tactical-cell { width: 14px; height: 14px; }
+}
