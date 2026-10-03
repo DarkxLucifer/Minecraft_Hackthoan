@@ -12,8 +12,11 @@ import sys
 import numpy as np
 import cv2
 
+# Add backend to sys.path
 CURRENT_DIR = Path(__file__).resolve().parent
-if (CURRENT_DIR / "yolo_processing.py").exists():
+if (CURRENT_DIR / "backend").exists():
+    sys.path.append(str(CURRENT_DIR / "backend"))
+elif (CURRENT_DIR / "yolo_processing.py").exists():
     sys.path.append(str(CURRENT_DIR))
 
 from yolo_processing import TwoStageANPR
@@ -46,6 +49,7 @@ def main():
     if sample_img is None:
         print("Creating synthetic test image...")
         sample_img = np.zeros((480, 640, 3), dtype=np.uint8)
+        # Draw placeholder car and plate
         cv2.rectangle(sample_img, (100, 100), (540, 400), (100, 100, 100), -1)
         cv2.rectangle(sample_img, (250, 300), (390, 350), (255, 255, 255), -1)
         cv2.putText(sample_img, "MH12DE1433", (260, 335), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
@@ -64,6 +68,7 @@ def main():
         text_disp = p.get('text', 'N/A')
         print(f"  [{i}] Text: '{text_disp}' | Plate Conf: {p['conf']:.1%} | Box: {p['box']}")
 
+    # Save verification output
     out_path = Path("test_anpr_trocr_result.jpg")
     cv2.imwrite(str(out_path), res["annotated"])
     print(f"\n✅ Verification result saved to: {out_path.resolve()}")

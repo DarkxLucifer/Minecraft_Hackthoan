@@ -9,6 +9,20 @@ env/
 venv/
 ENV/
 
+# Large Model Weights (>100MB GitHub Limit)
+*.safetensors
+*.bin
+*.pth
+*.onnx
+
+# Temporary outputs & test artifacts
+tmp*
+*.tmp
+logs/
+*.log
+test_anpr_trocr_result.jpg
+test_anpr_result.jpg
+
 # IDE configs
 .idea/
 .vscode/
@@ -20,9 +34,3 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 .DS_Store
-
-# Temporary outputs
-tmp*
-*.tmp
-logs/
-*.log
