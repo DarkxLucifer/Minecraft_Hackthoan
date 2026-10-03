@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import VisionXLogo from "@/components/VisionXLogo";
-import AccessibilityIcon from "@/components/AccessibilityIcon";
+import AuthModal from "@/components/AuthModal";
 
 type RekorNavProps = {
   theme?: "light" | "dark";
@@ -10,14 +10,9 @@ type RekorNavProps = {
 
 export default function RekorNav({ theme = "light" }: RekorNavProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [accessOpen, setAccessOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
-  // Accessibility settings state
-  const [highContrast, setHighContrast] = useState(false);
-  const [largeText, setLargeText] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,8 +27,8 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setMobileMenuOpen(false);
-        setAccessOpen(false);
         setContactOpen(false);
+        setAuthOpen(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -43,9 +38,7 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
   return (
     <>
       <nav
-        className={`rekor-navbar theme-${theme} ${scrolled ? "scrolled" : ""} ${
-          highContrast ? "high-contrast" : ""
-        } ${largeText ? "large-text" : ""}`}
+        className={`rekor-navbar theme-${theme} ${scrolled ? "scrolled" : ""}`}
         aria-label="Main Navigation"
       >
         <div className="rekor-nav-container">
@@ -54,19 +47,16 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
             <VisionXLogo size="md" />
           </a>
 
-          {/* Center Navigation Links - Direct clean links, no dropdowns */}
+          {/* Center Navigation Links - Curated to requested layout */}
           <div className="rekor-nav-menu desktop-only">
+            <a href="#about" className="rekor-nav-link">
+              About
+            </a>
             <a href="#demo" className="rekor-nav-link">
               Solutions
             </a>
-            <a href="#insights" className="rekor-nav-link">
-              Resources
-            </a>
             <a href="#pipeline" className="rekor-nav-link">
-              Company
-            </a>
-            <a href="#dashboard" className="rekor-nav-link">
-              Dashboard
+              Pipeline
             </a>
           </div>
 
@@ -77,17 +67,18 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
               className="rekor-contact-btn"
               onClick={() => setContactOpen(true)}
             >
-              Contact Us
+              Contact
             </button>
 
+            {/* Launch VisionX Button */}
             <button
               type="button"
-              className="rekor-access-btn"
-              aria-label="Accessibility options"
-              title="Accessibility Menu"
-              onClick={() => setAccessOpen((v) => !v)}
+              className="rekor-launch-btn"
+              onClick={() => setAuthOpen(true)}
+              aria-label="Launch VisionX Platform"
             >
-              <AccessibilityIcon width="20" height="20" />
+              <span>LAUNCH VISIONX</span>
+              <span className="launch-arrow" aria-hidden="true">→</span>
             </button>
 
             {/* Mobile Hamburger Button */}
@@ -95,6 +86,7 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
               type="button"
               className="rekor-mobile-toggle mobile-only"
               aria-label="Toggle mobile menu"
+              aria-expanded={mobileMenuOpen}
               onClick={() => setMobileMenuOpen((v) => !v)}
             >
               <span className={`bar ${mobileMenuOpen ? "open" : ""}`} />
@@ -107,10 +99,19 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
         {mobileMenuOpen && (
           <div className="rekor-mobile-drawer">
             <div className="rekor-mobile-links">
+              <a href="#about" onClick={() => setMobileMenuOpen(false)}>About</a>
               <a href="#demo" onClick={() => setMobileMenuOpen(false)}>Solutions</a>
-              <a href="#insights" onClick={() => setMobileMenuOpen(false)}>Resources</a>
-              <a href="#pipeline" onClick={() => setMobileMenuOpen(false)}>Company</a>
-              <a href="#dashboard" onClick={() => setMobileMenuOpen(false)}>Dashboard</a>
+              <a href="#pipeline" onClick={() => setMobileMenuOpen(false)}>Pipeline</a>
+              <button
+                type="button"
+                className="rekor-launch-btn mobile-full"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setAuthOpen(true);
+                }}
+              >
+                LAUNCH VISIONX →
+              </button>
               <button
                 type="button"
                 className="rekor-contact-btn mobile-full"
@@ -126,91 +127,8 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
         )}
       </nav>
 
-      {/* Accessibility Popover */}
-      {accessOpen && (
-        <div className="rekor-access-modal-overlay" onClick={() => setAccessOpen(false)}>
-          <div
-            className="rekor-access-modal"
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-labelledby="access-title"
-          >
-            <div className="access-modal-head">
-              <div className="access-head-title">
-                <AccessibilityIcon width="22" height="22" />
-                <h3 id="access-title">Accessibility Preferences</h3>
-              </div>
-              <button
-                type="button"
-                className="access-close-btn"
-                onClick={() => setAccessOpen(false)}
-                aria-label="Close accessibility menu"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="access-modal-body">
-              <label className="access-toggle-row">
-                <div className="toggle-info">
-                  <strong>High Contrast Mode</strong>
-                  <span>Increases border strength and text contrast for low vision</span>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={highContrast}
-                  onChange={(e) => setHighContrast(e.target.checked)}
-                />
-              </label>
-
-              <label className="access-toggle-row">
-                <div className="toggle-info">
-                  <strong>Large Display Font</strong>
-                  <span>Enlarges navigation and hero paragraph typography</span>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={largeText}
-                  onChange={(e) => setLargeText(e.target.checked)}
-                />
-              </label>
-
-              <label className="access-toggle-row">
-                <div className="toggle-info">
-                  <strong>Pause Micro-Animations</strong>
-                  <span>Reduces rotational motion and pulsing indicator effects</span>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={reducedMotion}
-                  onChange={(e) => setReducedMotion(e.target.checked)}
-                />
-              </label>
-            </div>
-
-            <div className="access-modal-foot">
-              <button
-                type="button"
-                className="access-reset-btn"
-                onClick={() => {
-                  setHighContrast(false);
-                  setLargeText(false);
-                  setReducedMotion(false);
-                }}
-              >
-                Reset Default
-              </button>
-              <button
-                type="button"
-                className="access-done-btn"
-                onClick={() => setAccessOpen(false)}
-              >
-                Done
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Auth Modal (Login / Sign Up) */}
+      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
 
       {/* Contact / Book Demo Modal */}
       {contactOpen && (
@@ -228,7 +146,7 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
               </div>
               <button
                 type="button"
-                className="access-close-btn"
+                className="contact-close-btn"
                 onClick={() => setContactOpen(false)}
                 aria-label="Close dialog"
               >
@@ -237,53 +155,41 @@ export default function RekorNav({ theme = "light" }: RekorNavProps) {
             </div>
 
             <form
-              className="contact-modal-form"
+              className="contact-form"
               onSubmit={(e) => {
                 e.preventDefault();
-                alert("Thank you! A VisionX roadway intelligence specialist will contact you shortly.");
+                alert("Thank you. A VisionX solutions architect will contact your agency within 24 hours.");
                 setContactOpen(false);
               }}
             >
-              <div className="form-group-row">
-                <div className="form-group">
-                  <label htmlFor="c-fname">First Name *</label>
-                  <input id="c-fname" type="text" required placeholder="Jane" defaultValue="Sarah" />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="c-lname">Last Name *</label>
-                  <input id="c-lname" type="text" required placeholder="Doe" defaultValue="Connor" />
-                </div>
+              <div className="form-group">
+                <label htmlFor="contact-name">Full Name</label>
+                <input id="contact-name" type="text" required placeholder="Officer / Director Name" />
               </div>
 
               <div className="form-group">
-                <label htmlFor="c-email">Work Email *</label>
-                <input id="c-email" type="email" required placeholder="name@agency.gov" defaultValue="s.connor@dot.state.gov" />
+                <label htmlFor="contact-email">Agency Email</label>
+                <input id="contact-email" type="email" required placeholder="name@agency.gov.in" />
               </div>
 
               <div className="form-group">
-                <label htmlFor="c-org">Agency / Organization *</label>
-                <input id="c-org" type="text" required placeholder="Department of Transportation or Agency" defaultValue="State Dept of Transportation" />
+                <label htmlFor="contact-agency">Department / Municipality</label>
+                <input id="contact-agency" type="text" required placeholder="e.g. Delhi Traffic Police / NHAI" />
               </div>
 
               <div className="form-group">
-                <label htmlFor="c-interest">Primary Area of Interest</label>
-                <select id="c-interest" defaultValue="Transportation Management">
-                  <option value="Transportation Management">Transportation Management</option>
-                  <option value="Roadway Intelligence">Roadway Intelligence</option>
-                  <option value="Urban Mobility">Urban Mobility</option>
-                  <option value="Public Safety">Public Safety & ALPR</option>
-                  <option value="Hardware / Edge Pro">Hardware & Solar Sensors</option>
+                <label htmlFor="contact-use-case">Primary Operational Objective</label>
+                <select id="contact-use-case">
+                  <option>Multi-Camera ANPR & Trajectory Tracking</option>
+                  <option>Highway Speed & Bottleneck Heatmap</option>
+                  <option>Watchlist & Stolen Vehicle Hotlist Alerting</option>
+                  <option>Pilot Demonstration (Hackathon / Proof of Concept)</option>
                 </select>
               </div>
 
-              <div className="form-actions">
-                <button type="button" className="btn-cancel" onClick={() => setContactOpen(false)}>
-                  Cancel
-                </button>
-                <button type="submit" className="rekor-contact-btn submit-btn">
-                  Submit Request →
-                </button>
-              </div>
+              <button type="submit" className="contact-submit-btn">
+                REQUEST MISSION BRIEFING →
+              </button>
             </form>
           </div>
         </div>

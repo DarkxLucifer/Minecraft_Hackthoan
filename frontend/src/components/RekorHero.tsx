@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import InteractiveCity from "@/components/InteractiveCity";
+import AuthModal from "@/components/AuthModal";
 
 const ROTATING_DOMAINS = [
   {
@@ -30,6 +31,7 @@ export default function RekorHero({ theme = "light" }: RekorHeroProps) {
   const [activeIdx, setActiveIdx] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
 
   // Auto-rotate every 5.5s unless paused by user interaction
   useEffect(() => {
@@ -43,13 +45,14 @@ export default function RekorHero({ theme = "light" }: RekorHeroProps) {
   // Handle ESC key to close video modal
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && videoModalOpen) {
-        setVideoModalOpen(false);
+      if (e.key === "Escape") {
+        if (videoModalOpen) setVideoModalOpen(false);
+        if (authOpen) setAuthOpen(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [videoModalOpen]);
+  }, [videoModalOpen, authOpen]);
 
   const current = ROTATING_DOMAINS[activeIdx];
 
@@ -69,13 +72,13 @@ export default function RekorHero({ theme = "light" }: RekorHeroProps) {
           {/* Eyebrow: SpaceX-style all-caps microtext */}
           <p className="rekor-hero-eyebrow">VISIONX IS</p>
 
-          {/* Large Rotating / Two-line Title in Uppercase D-DIN / Inter */}
+          {/* Large Rotating / Two-line Title promoted to semantic H1 */}
           <div
             className="rekor-hero-headline-wrap"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
-            <div className="rekor-hero-headline-lines">
+            <h1 className="rekor-hero-headline-lines">
               <span
                 key={`line1-${activeIdx}`}
                 className="rekor-hero-line line-1"
@@ -88,14 +91,15 @@ export default function RekorHero({ theme = "light" }: RekorHeroProps) {
               >
                 {current.line2}
               </span>
-            </div>
+            </h1>
 
-            {/* Rotator Indicator Dots */}
+            {/* Rotator Indicator Dots with accessible touch targets */}
             <div className="rekor-slider-dots" role="tablist" aria-label="Rotating domains">
               {ROTATING_DOMAINS.map((domain, i) => (
                 <button
                   key={domain.line1}
                   type="button"
+                  role="tab"
                   className={`rekor-dot ${i === activeIdx ? "active" : ""}`}
                   onClick={() => {
                     setActiveIdx(i);
@@ -115,74 +119,28 @@ export default function RekorHero({ theme = "light" }: RekorHeroProps) {
             for a digital-enabled operating system for the road.
           </p>
 
-          {/* Action CTAs: SpaceX Ghost Pill on Light */}
+          {/* Action CTAs */}
           <div className="rekor-hero-actions">
             <button
               type="button"
-              className="rekor-video-pill-btn"
-              onClick={() => setVideoModalOpen(true)}
-              aria-label="Watch the VisionX platform overview video"
+              className="rekor-launch-hero-btn"
+              onClick={() => setAuthOpen(true)}
+              aria-label="Launch VisionX platform"
             >
-              <span className="play-icon-disc">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="play-icon-tri"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </span>
-              <span className="btn-label">SEE THE VISIONX DIFFERENCE</span>
+              <span>LAUNCH VISIONX</span>
+              <span className="launch-hero-arrow" aria-hidden="true">→</span>
             </button>
 
-            <a href="#insights" className="rekor-learn-more-link">
+            <a href="#about" className="rekor-learn-more-link">
               <span>LEARN ABOUT VISIONX</span>
-              <span className="arrow-glyph" aria-hidden="true">→</span>
+              <span className="arrow-glyph" aria-hidden="true">↓</span>
             </a>
           </div>
         </div>
       </div>
 
-      {/* ─────── Video Lightbox Modal ─────── */}
-      {videoModalOpen && (
-        <div
-          className="rekor-video-modal-overlay"
-          onClick={() => setVideoModalOpen(false)}
-          role="dialog"
-          aria-modal="true"
-          aria-label="VisionX Video Player"
-        >
-          <div
-            className="rekor-video-modal-box"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="rekor-video-modal-top">
-              <div className="rekor-modal-title">
-                <span className="pill">OVERVIEW</span>
-                <span>VisionX · Roadway Intelligence Operating System</span>
-              </div>
-              <button
-                type="button"
-                className="rekor-video-close-btn"
-                onClick={() => setVideoModalOpen(false)}
-                aria-label="Close video player"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="rekor-video-embed-wrap">
-              <iframe
-                src="https://player.vimeo.com/video/599565219?autoplay=1&title=0&byline=0&portrait=0"
-                title="VisionX - Delivering Revolutionary Roadway Intelligence"
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Auth Modal Triggered from Hero */}
+      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
     </header>
   );
 }
