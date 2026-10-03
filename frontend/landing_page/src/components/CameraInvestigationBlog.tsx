@@ -18,7 +18,7 @@ interface CameraInvestigationBlogProps {
   initialQuery?: string;
 }
 
-const BACKEND_URL = 'http://127.0.0.1:8000';
+import { BACKEND_URL } from "@/lib/config";
 
 export const CameraInvestigationBlog: React.FC<CameraInvestigationBlogProps> = ({
   onJumpToCamera,
@@ -37,10 +37,15 @@ export const CameraInvestigationBlog: React.FC<CameraInvestigationBlogProps> = (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query: targetPlate }),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+        return res.json();
+      })
       .then((data: MultiCameraSearchResult) => {
         setIsLoading(false);
-        setSearchResult(data);
+        if (data && typeof data.cameras_detected_in === 'number') {
+          setSearchResult(data);
+        }
       })
       .catch((err) => {
         console.error('Multi-camera search error:', err);
