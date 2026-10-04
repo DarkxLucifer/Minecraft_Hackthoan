@@ -20,6 +20,13 @@ const RealLeafletDistrictMap = dynamic(
   { ssr: false }
 );
 
+import { BACKEND_URL } from '@/lib/config';
+const resolvePhotoUrl = (url?: string) => {
+  if (!url) return '';
+  const filename = url.split('/').pop();
+  return `/crops/${filename}`;
+};
+
 interface GpsTransitMapPageProps {
   onBackToDashboard: () => void;
   initialPlate?: string;
@@ -905,7 +912,7 @@ export const GpsTransitMapPage: React.FC<GpsTransitMapPageProps> = ({
             <div className="grid grid-cols-2 gap-4">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-black/5 border border-black/10 relative group">
                 <img
-                  src={currentTrajectory.firstSeen.photoVehicle}
+                  src={resolvePhotoUrl(currentTrajectory.firstSeen.photoVehicle)}
                   alt={currentTrajectory.firstSeen.photoLabel1}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   onError={(e) => {
@@ -922,7 +929,7 @@ export const GpsTransitMapPage: React.FC<GpsTransitMapPageProps> = ({
 
               <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-black/5 border border-black/10 relative group">
                 <img
-                  src={currentTrajectory.firstSeen.photoPlate}
+                  src={resolvePhotoUrl(currentTrajectory.firstSeen.photoPlate)}
                   alt={currentTrajectory.firstSeen.photoLabel2}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   onError={(e) => {
@@ -960,7 +967,7 @@ export const GpsTransitMapPage: React.FC<GpsTransitMapPageProps> = ({
               <div className="grid grid-cols-2 gap-4">
                 <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-black/5 border border-black/10 relative group">
                   <img
-                    src={currentTrajectory.reappearedAt.photoVehicle}
+                    src={resolvePhotoUrl(currentTrajectory.reappearedAt.photoVehicle)}
                     alt={currentTrajectory.reappearedAt.photoLabel1}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     onError={(e) => {
@@ -977,7 +984,7 @@ export const GpsTransitMapPage: React.FC<GpsTransitMapPageProps> = ({
 
                 <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-black/5 border border-black/10 relative group">
                   <img
-                    src={currentTrajectory.reappearedAt.photoPlate}
+                    src={resolvePhotoUrl(currentTrajectory.reappearedAt.photoPlate)}
                     alt={currentTrajectory.reappearedAt.photoLabel2}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     onError={(e) => {
